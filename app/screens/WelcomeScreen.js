@@ -24,7 +24,7 @@ function WelcomeScreen({ navigation }) {
     >
       <View style={styles.logoContainer}>
         <Image style={styles.logo} source={require("../assets/logo.png")} />
-        <Text style={{ bottom: 20 }}>Stay Connected</Text>
+        <Text style={{ bottom: 20 }}>Chirp</Text>
       </View>
       <View style={styles.textBoxAndButtonContainer}>
         <TextInput
