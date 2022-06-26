@@ -13,10 +13,11 @@ import {
 import colors from "../config/colors";
 
 function WelcomeScreen({ navigation }) {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const signIn = () => {};
+
   return (
     <ImageBackground
       style={styles.background}
@@ -47,7 +48,6 @@ function WelcomeScreen({ navigation }) {
           title="Register"
           onPress={() => navigation.navigate("Register")}
         />
-        {/* <Button title="Log In With G-Mail" style={styles.loginButton} /> */}
       </View>
     </ImageBackground>
   );

@@ -8,17 +8,30 @@ import {
   Button,
 } from "react-native";
 import React, { useState } from "react";
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import colors from "../config/colors";
 
-const RegisterScreen = () => {
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [createdUserName, setcreatedUserName] = useState();
-  const [createdPassword, setCreatedPassword] = useState();
-  const [linkedEmail, setLinkedEmail] = useState();
+const RegisterScreen = ({ navigation }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
-  const submitForm = () => {};
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        navigation.navigate("Welcome");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        // ..
+      });
+  };
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.pageContainer}>
@@ -43,27 +56,21 @@ const RegisterScreen = () => {
         />
         <TextInput
           style={styles.textBox}
-          placeholder="Enter A Username"
+          placeholder="Enter Valid Email Address"
           type="username"
-          value={createdUserName}
-          onChangeText={(text) => setcreatedUserName(text)}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
         />
         <TextInput
           style={styles.textBox}
           placeholder="Create A Password"
           type="password"
-          value={createdPassword}
-          onChangeText={(text) => setCreatedPassword(text)}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           secureTextEntry
         />
-        <TextInput
-          style={styles.textBox}
-          placeholder="Enter Valid Email Address"
-          type="username"
-          value={linkedEmail}
-          onChangeText={(text) => setLinkedEmail(text)}
-        />
-        <Button style={styles.button} title="Submit" onPress={submitForm} />
+
+        <Button style={styles.button} title="Submit" onPress={handleSignUp} />
       </View>
     </KeyboardAvoidingView>
   );
