@@ -28,8 +28,6 @@ const RegisterScreen = ({ navigation }) => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-
-        // ..
       });
   };
 
@@ -40,7 +38,7 @@ const RegisterScreen = ({ navigation }) => {
         <Text style>Chirp</Text>
       </View>
       <View style={styles.formContainer}>
-        <TextInput
+        {/* <TextInput
           style={styles.textBox}
           placeholder="First Name"
           type="firstName"
@@ -53,7 +51,7 @@ const RegisterScreen = ({ navigation }) => {
           type="lastName"
           value={lastName}
           onChangeText={(text) => setLastName(text)}
-        />
+        /> */}
         <TextInput
           style={styles.textBox}
           placeholder="Enter Valid Email Address"
@@ -80,7 +78,7 @@ export default RegisterScreen;
 
 const styles = StyleSheet.create({
   formContainer: {
-    flex: 0.45,
+    flex: 0.2,
     top: 20,
     justifyContent: "space-between",
   },

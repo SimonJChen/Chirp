@@ -9,14 +9,26 @@ import {
   TextInput,
   Keyboard,
 } from "react-native";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 import colors from "../config/colors";
+import { auth } from "../firebase";
 
 function WelcomeScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const signIn = () => {};
+  const handleSignIn = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        navigation.navigate("Chat Screen");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
 
   return (
     <ImageBackground
@@ -43,7 +55,7 @@ function WelcomeScreen({ navigation }) {
           onChangeText={(text) => setPassword(text)}
           secureTextEntry
         />
-        <Button style={styles.button} title="Login" onPress={signIn} />
+        <Button style={styles.button} title="Login" onPress={handleSignIn} />
         <Button
           title="Register"
           onPress={() => navigation.navigate("Register")}

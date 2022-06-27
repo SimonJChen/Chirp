@@ -9,7 +9,6 @@ import colors from "./app/config/colors";
 
 //assuming this acts as routes
 const Stack = createNativeStackNavigator();
-// return <ChatImageScreen />;
 export default function App() {
   const globalScreenOptions = {
     headerStyle: { backgroundColor: colors.secondaryColor },
