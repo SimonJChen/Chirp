@@ -33,20 +33,6 @@ function ChatScreen(props) {
   const messagesCollectionRef = collection(db, "messages");
 
   useEffect(() => {
-    // const getMessage = async () => {
-    //   const data = await getDocs(
-    //     query(messagesCollectionRef, orderBy("createdAt", "asc"))
-    //   );
-
-    //   setMessages(
-    //     data.docs.map((doc) => ({
-    //       ...doc.data(),
-    //       id: doc.id,
-    //     }))
-    //   );
-    // };
-    // getMessage();
-
     const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       setMessages(
