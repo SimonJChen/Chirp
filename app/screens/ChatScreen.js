@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Image,
   StyleSheet,
@@ -47,6 +47,12 @@ function ChatScreen(props) {
     };
   }, []);
 
+  const scrollViewRef = useRef();
+
+  const clearTextState = () => {
+    setTempMessage("");
+  };
+
   async function handleAddNewMessage() {
     Keyboard.dismiss();
     const { uid, displayName, email } = auth.currentUser;
@@ -57,60 +63,68 @@ function ChatScreen(props) {
       createdAt: serverTimestamp(),
       email: email,
     });
+    clearTextState();
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={90}
+        style={styles.container}
+        // behavior={Platform.OS === "ios" ? "padding" : "height"}
+        // keyboardVerticalOffset={90}
       >
-        <>
-          <ScrollView style={styles.chatBox}>
-            {messages.map(({ id, uid, text, email }) =>
-              uid === auth.currentUser.uid ? (
-                <View key={id} style={styles.sender}>
-                  <Text>{email}</Text>
-                  <Text style={styles.sendersText}>{text}</Text>
-                </View>
-              ) : (
-                <View>
-                  <Text key={id} style={styles.receiver}>
-                    {email}
-                  </Text>
-                  <Text style={styles.receiverText}>{text}</Text>
-                </View>
-              )
-            )}
-          </ScrollView>
-          <View style={styles.messageAndSendButtonContainer}>
-            <TextInput
-              placeholder="Message"
-              value={tempMessage}
-              onChangeText={(text) => setTempMessage(text)}
-              style={styles.sendMessageBox}
-            />
-            <Button title="Send" onPress={handleAddNewMessage} />
-          </View>
-        </>
+        <ScrollView
+          ref={scrollViewRef}
+          onContentSizeChange={() =>
+            scrollViewRef.current.scrollToEnd({ animated: true })
+          }
+          style={styles.chatContainer}
+        >
+          {messages.map(({ id, uid, text, email }) =>
+            uid === auth.currentUser.uid ? (
+              <View key={id} style={styles.sender}>
+                <Text>{email}</Text>
+                <Text style={styles.sendersText}>{text}</Text>
+              </View>
+            ) : (
+              <View style={styles.receiver} key={id}>
+                <Text>{email}</Text>
+                <Text style={styles.receiverText}>{text}</Text>
+              </View>
+            )
+          )}
+        </ScrollView>
+        <View style={styles.messageAndSendButtonContainer}>
+          <TextInput
+            placeholder="Message"
+            value={tempMessage}
+            onChangeText={(text) => setTempMessage(text)}
+            style={styles.sendMessageBox}
+          />
+          <Button title="Send" onPress={handleAddNewMessage} />
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
+  container: { flex: 1 },
+  chatContainer: { flex: 1, bottom: 50 },
   chatBox: {
     position: "absolute",
     top: 20,
     left: 20,
   },
   messageAndSendButtonContainer: {
+    flex: 1,
     position: "absolute",
     flexWrap: "wrap",
     flexDirection: "row",
     alignItems: "flex-start",
     bottom: 10,
   },
+  receiver: { alignSelf: "flex-end" },
+  sender: { alignSelf: "flex-start" },
   sendMessageBox: {
     flex: 1,
     height: 40,
